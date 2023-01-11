@@ -149,10 +149,7 @@ extern void SERCOM6_0_Handler          ( void ) __attribute__((weak, alias("Dumm
 extern void SERCOM6_1_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void SERCOM6_2_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void SERCOM6_OTHER_Handler      ( void ) __attribute__((weak, alias("Dummy_Handler")));
-extern void SERCOM7_0_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler")));
-extern void SERCOM7_1_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler")));
-extern void SERCOM7_2_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler")));
-extern void SERCOM7_OTHER_Handler      ( void ) __attribute__((weak, alias("Dummy_Handler")));
+extern void SERCOM7_I2C_InterruptHandler ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void CAN0_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void CAN1_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void USB_OTHER_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler")));
@@ -307,10 +304,10 @@ const H3DeviceVectors exception_table=
     .pfnSERCOM6_1_Handler          = SERCOM6_1_Handler,
     .pfnSERCOM6_2_Handler          = SERCOM6_2_Handler,
     .pfnSERCOM6_OTHER_Handler      = SERCOM6_OTHER_Handler,
-    .pfnSERCOM7_0_Handler          = SERCOM7_0_Handler,
-    .pfnSERCOM7_1_Handler          = SERCOM7_1_Handler,
-    .pfnSERCOM7_2_Handler          = SERCOM7_2_Handler,
-    .pfnSERCOM7_OTHER_Handler      = SERCOM7_OTHER_Handler,
+    .pfnSERCOM7_0_Handler          = SERCOM7_I2C_InterruptHandler,
+    .pfnSERCOM7_1_Handler          = SERCOM7_I2C_InterruptHandler,
+    .pfnSERCOM7_2_Handler          = SERCOM7_I2C_InterruptHandler,
+    .pfnSERCOM7_OTHER_Handler      = SERCOM7_I2C_InterruptHandler,
     .pfnCAN0_Handler               = CAN0_Handler,
     .pfnCAN1_Handler               = CAN1_Handler,
     .pfnUSB_OTHER_Handler          = USB_OTHER_Handler,

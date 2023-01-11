@@ -49,6 +49,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "peripheral/sercom/usart/plib_sercom2_usart.h"
+#include "peripheral/sercom/i2c_master/plib_sercom7_i2c_master.h"
 #include "peripheral/nvmctrl/plib_nvmctrl.h"
 #include "bsp/bsp.h"
 #include "peripheral/evsys/plib_evsys.h"
@@ -60,10 +61,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "osal/osal.h"
-#include "task1.h"
-#include "task2.h"
-#include "task3.h"
-#include "task4.h"
 
 
 

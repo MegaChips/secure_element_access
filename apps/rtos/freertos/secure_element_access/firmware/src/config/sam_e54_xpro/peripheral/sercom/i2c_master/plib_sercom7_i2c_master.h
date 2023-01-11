@@ -1,20 +1,22 @@
 /*******************************************************************************
-  NVIC PLIB Implementation
+  Serial Communication Interface Inter-Integrated Circuit (SERCOM I2C) Library
+  Instance Header File
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    plib_nvic.c
+    plib_sercom7_i2c.h
 
   Summary:
-    NVIC PLIB Source File
+    SERCOM I2C PLIB Header file
 
   Description:
-    None
-
+    This file defines the interface to the SERCOM I2C peripheral library. This
+    library provides access to and control of the associated peripheral
+    instance.
 *******************************************************************************/
-
+// DOM-IGNORE-BEGIN
 /*******************************************************************************
 * Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
 *
@@ -37,85 +39,62 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
+// DOM-IGNORE-END
 
-#include "device.h"
-#include "plib_nvic.h"
-
+#ifndef PLIB_SERCOM7_I2C_H
+#define PLIB_SERCOM7_I2C_H
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: NVIC Implementation
+// Section: Included Files
+// *****************************************************************************
+// *****************************************************************************
+/* This section lists the other files that are included in this file.
+*/
+
+#include "plib_sercom_i2c_master_common.h"
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus // Provide C++ Compatibility
+
+    extern "C" {
+
+#endif
+// DOM-IGNORE-END
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Interface Routines
 // *****************************************************************************
 // *****************************************************************************
 
-void NVIC_Initialize( void )
-{
-    /* Priority 0 to 7 and no sub-priority. 0 is the highest priority */
-    NVIC_SetPriorityGrouping( 0x00 );
+/*
+ * The following functions make up the methods (set of possible operations) of
+ * this interface.
+ */
 
-    /* Enable NVIC Controller */
-    __DMB();
-    __enable_irq();
+void SERCOM7_I2C_Initialize(void);
 
-    /* Enable the interrupt sources and configure the priorities as configured
-     * from within the "Interrupt Manager" of MHC. */
-    NVIC_SetPriority(SysTick_IRQn, 7);
-    NVIC_SetPriority(EIC_EXTINT_15_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_15_IRQn);
-    NVIC_SetPriority(SERCOM2_0_IRQn, 7);
-    NVIC_EnableIRQ(SERCOM2_0_IRQn);
-    NVIC_SetPriority(SERCOM2_1_IRQn, 7);
-    NVIC_EnableIRQ(SERCOM2_1_IRQn);
-    NVIC_SetPriority(SERCOM2_2_IRQn, 7);
-    NVIC_EnableIRQ(SERCOM2_2_IRQn);
-    NVIC_SetPriority(SERCOM2_OTHER_IRQn, 7);
-    NVIC_EnableIRQ(SERCOM2_OTHER_IRQn);
+bool SERCOM7_I2C_Read(uint16_t address, uint8_t *pdata, uint32_t length);
 
-    NVIC_SetPriority(SERCOM7_0_IRQn, 7);
-    NVIC_EnableIRQ(SERCOM7_0_IRQn);
-    NVIC_SetPriority(SERCOM7_1_IRQn, 7);
-    NVIC_EnableIRQ(SERCOM7_1_IRQn);
-    NVIC_SetPriority(SERCOM7_2_IRQn, 7);
-    NVIC_EnableIRQ(SERCOM7_2_IRQn);
-    NVIC_SetPriority(SERCOM7_OTHER_IRQn, 7);
-    NVIC_EnableIRQ(SERCOM7_OTHER_IRQn);
+bool SERCOM7_I2C_Write(uint16_t address, uint8_t *pdata, uint32_t length);
 
-    /* Enable Usage fault */
-    SCB->SHCSR |= (SCB_SHCSR_USGFAULTENA_Msk);
-    /* Trap divide by zero */
-    SCB->CCR   |= SCB_CCR_DIV_0_TRP_Msk;
+bool SERCOM7_I2C_WriteRead(uint16_t address, uint8_t *wdata, uint32_t wlength, uint8_t *rdata, uint32_t rlength);
 
-    /* Enable Bus fault */
-    SCB->SHCSR |= (SCB_SHCSR_BUSFAULTENA_Msk);
+bool SERCOM7_I2C_IsBusy(void);
 
+SERCOM_I2C_ERROR SERCOM7_I2C_ErrorGet(void);
+
+void SERCOM7_I2C_CallbackRegister(SERCOM_I2C_CALLBACK callback, uintptr_t contextHandle);
+
+bool SERCOM7_I2C_TransferSetup(SERCOM_I2C_TRANSFER_SETUP* setup, uint32_t srcClkFreq );
+
+
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus  // Provide C++ Compatibility
 }
+#endif
+// DOM-IGNORE-END
 
-void NVIC_INT_Enable( void )
-{
-    __DMB();
-    __enable_irq();
-}
-
-bool NVIC_INT_Disable( void )
-{
-    bool processorStatus = (__get_PRIMASK() == 0U);
-
-    __disable_irq();
-    __DMB();
-
-    return processorStatus;
-}
-
-void NVIC_INT_Restore( bool state )
-{
-    if( state == true )
-    {
-        __DMB();
-        __enable_irq();
-    }
-    else
-    {
-        __disable_irq();
-        __DMB();
-    }
-}
+#endif /* PLIB_SERCOM7_I2C_H */

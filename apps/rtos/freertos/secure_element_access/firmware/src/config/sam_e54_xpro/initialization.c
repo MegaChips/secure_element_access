@@ -134,6 +134,8 @@ void SYS_Initialize ( void* data )
 
     SERCOM2_USART_Initialize();
 
+    SERCOM7_I2C_Initialize();
+
 	BSP_Initialize();
     EVSYS_Initialize();
 
@@ -143,10 +145,6 @@ void SYS_Initialize ( void* data )
 
 
 
-    TASK1_Initialize();
-    TASK2_Initialize();
-    TASK3_Initialize();
-    TASK4_Initialize();
 
 
     NVIC_Initialize();
