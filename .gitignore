@@ -3,12 +3,9 @@
 *.map
 *.d
 **/nbproject/private
-**/nbproject/Makefile-*
 **/nbproject/Package-*
 **/nbproject/project.properties
 **/*.X/debug
-**/*.X/dist
-**/*.X/build
 **/*.X/.generated_files
 **/*.IAR/Debug
 **/*.IAR/settings
@@ -17,3 +14,4 @@
 **/*.KEIL/Objects
 **/*.KEIL/*.uvguix.*
 Gemfile*
+.vscode/*
