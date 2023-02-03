@@ -15,3 +15,5 @@
 **/*.KEIL/*.uvguix.*
 Gemfile*
 .vscode/*
+**/__pycache__
+python/*.csv
