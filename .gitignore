@@ -17,3 +17,4 @@ Gemfile*
 .vscode/*
 **/__pycache__
 python/*.csv
+python/*.pem

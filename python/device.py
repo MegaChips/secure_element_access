@@ -3,43 +3,74 @@ import time
 import re 
 
 BYTES_OF_MAC_ADDRESS = 12
-PEM_FORMAT = '-----BEGIN CERTIFICATE-----(.+)-----END CERTIFICATE-----'
+PEM_FORMAT = '-----BEGIN .+-----(.+)-----END .+-----'
 
 class Device:
 
-    SEND_INTERVAL = 0.01
-    BOARD_COMMAND_INPUT_BUFFER_SIZE = 32
+    INTERVAL_SEND = 0.01
+    DEVICE_COMMAND_INPUT_BUFFER_SIZE = 32
 
-    READ_MAC_ADDRESS_EXECUTE_INTERVAL = 0.1
-    READ_CERTIFICATE_EXECUTE_INTERVAL = 0.5
+    EXECUTE_INTERVAL_READ_MAC_ADDRESS = 0.1
+    EXECUTE_INTERVAL_READ_CERTIFICATE = 0.5
+    EXECUTE_INTERVAL_WRITE_PUBLIC_KEY = 0.5
+    EXECUTE_INTERVAL_LOCK_SLOT = 0.1
 
     def __init__(self, port):
         self.serial_port = serial.Serial(port=port, baudrate=115200, timeout=3)
 
-    def write(self, write_bytes):
-        # Ensure that the command input buffer of the MCU does not overflow
-        while (write_bytes): 
-            first_bytes = write_bytes[:self.BOARD_COMMAND_INPUT_BUFFER_SIZE]
-            write_bytes = write_bytes[self.BOARD_COMMAND_INPUT_BUFFER_SIZE:]
-            self.serial_port.write(first_bytes.encode())
-            time.sleep(self.SEND_INTERVAL)
+    def send(self, command, *args):
 
-    def read(self):
-        # Read all data stored in the buffer
-        read_bytes = self.serial_port.read(self.serial_port.in_waiting) 
-        return(read_bytes.decode())
+        # Format into a single string.
+        # Separate each command or argument with a space.
+        commands = command 
+        for argument in args :
+            commands = commands + ' ' + argument 
+        if '\n' in commands or '\r' in commands:
+            raise ValueError('Commands and arguments must not contain CR/LF.')
+        commands += '\n' 
+
+        # Encoding into byte sequence.
+        command_bytes = commands.encode()
+
+        # Ensure that the command input buffer of the MCU does not overflow.
+        while (command_bytes): 
+            first_bytes   = command_bytes[:self.DEVICE_COMMAND_INPUT_BUFFER_SIZE-1]
+            command_bytes = command_bytes[self.DEVICE_COMMAND_INPUT_BUFFER_SIZE-1:]
+            self.serial_port.write(first_bytes)
+            time.sleep(self.INTERVAL_SEND)
+
+    def recieve(self):
+        # Read all data stored in the buffer.
+        responce_bytes = self.serial_port.read(self.serial_port.in_waiting) 
+        responce = responce_bytes.decode()
+        return(responce)
 
     def read_mac_address(self):
-        self.write('read_mac_address\n')
-        time.sleep(self.READ_MAC_ADDRESS_EXECUTE_INTERVAL)
-        mac_address = self.read()
+        self.send('read_mac_address')
+        time.sleep(self.EXECUTE_INTERVAL_READ_MAC_ADDRESS)
+        mac_address = self.recieve()
         return(parse_mac_address(mac_address))
 
     def read_certificate(self):
-        self.write('read_certificate\n')
-        time.sleep(self.READ_CERTIFICATE_EXECUTE_INTERVAL)
-        certificate = self.read()
+        self.send('read_certificate')
+        time.sleep(self.EXECUTE_INTERVAL_READ_CERTIFICATE)
+        certificate = self.recieve()
         return(parse_certificate(certificate))
+
+    def write_public_key(self, public_key_pem):
+        # Remove CR/LF contained in PEM.
+        filterd_public_key_pem = re.sub("\n|\r", "", public_key_pem) 
+        # Remove PEM header and footer.
+        base64_encoded_public_key = re.findall(PEM_FORMAT, filterd_public_key_pem, re.DOTALL)
+
+        self.send('write_public_key', base64_encoded_public_key[0])
+        time.sleep(self.EXECUTE_INTERVAL_WRITE_PUBLIC_KEY)
+        status = self.recieve()
+
+    def lock_slot(self, slot_number):
+        self.send('lock_slot', slot_number)
+        time.sleep(self.EXECUTE_INTERVAL_LOCK_SLOT)
+        status = self.recieve()
 
     def close(self):
         self.serial_port.close()
