@@ -29,7 +29,8 @@ ERR_LOG_CANNOT_OPEN_PORT         = 'ポートが開けません。'
 ERR_LOG_FAIL_READ                = 'データの読み込みに失敗しました。' 
 ERR_LOG_FAIL_WRITE               = 'データの書き込みに失敗しました。' 
 ERR_LOG_FILE_NOT_FOUND           = '指定したファイルが存在しません。'
-ERR_LOG_CANNOT_OPEN_FILE         = 'ファイルが開けませんでした。'
+ERR_LOG_CANNOT_OPEN_FILE         = 'ファイルが開けません。'
+ERR_LOG_INVALID_INPUT            = 'テキストの形式が正しくありません。'
 INFO_LOG_SUCCESS_WRITE_TO_FILE   = 'ファイルへの書き込みに成功しました。' 
 INFO_LOG_SUCCESS_WRITE_TO_DEVICE = 'デバイスへの書き込みに成功しました。' 
 
@@ -208,6 +209,9 @@ class WritePublicKey(Tk):
             self.log_monitor.log_error(ERR_LOG_CANNOT_OPEN_PORT)
             return
         except ValueError:
+            self.log_monitor.log_error(ERR_LOG_INVALID_INPUT)
+            return
+        except device.CommandExecutionError:
             self.log_monitor.log_error(ERR_LOG_FAIL_WRITE)
             return
     

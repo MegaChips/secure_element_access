@@ -2,7 +2,7 @@ import serial
 import time 
 import re 
 
-BYTES_OF_MAC_ADDRESS = 12
+BYTES_OF_MAC_ADDRESS = 6 
 PEM_FORMAT = '-----BEGIN .+-----(.+)-----END .+-----'
 
 class Device:
@@ -10,24 +10,10 @@ class Device:
     INTERVAL_SEND = 0.01
     DEVICE_COMMAND_INPUT_BUFFER_SIZE = 32
 
-    EXECUTE_INTERVAL_READ_MAC_ADDRESS = 0.1
-    EXECUTE_INTERVAL_READ_CERTIFICATE = 0.5
-    EXECUTE_INTERVAL_WRITE_PUBLIC_KEY = 0.5
-    EXECUTE_INTERVAL_LOCK_SLOT = 0.1
-
     def __init__(self, port):
         self.serial_port = serial.Serial(port=port, baudrate=115200, timeout=3)
 
-    def send(self, command, *args):
-
-        # Format into a single string.
-        # Separate each command or argument with a space.
-        commands = command 
-        for argument in args :
-            commands = commands + ' ' + argument 
-        if '\n' in commands or '\r' in commands:
-            raise ValueError('Commands and arguments must not contain CR/LF.')
-        commands += '\n' 
+    def send(self, commands):
 
         # Encoding into byte sequence.
         command_bytes = commands.encode()
@@ -43,34 +29,52 @@ class Device:
         # Read all data stored in the buffer.
         responce_bytes = self.serial_port.read(self.serial_port.in_waiting) 
         responce = responce_bytes.decode()
-        return(responce)
+        return(responce.strip())
+
+    def execute_command(self, command, *command_args, execute_interval_s=0.1):
+
+        # Format into a single string.
+        # Separate each command or argument with a space.
+        commands = command 
+        for argument in command_args :
+            commands = commands + ' ' + argument 
+        if '\n' in commands or '\r' in commands:
+            raise ValueError('Commands and arguments must not contain CR/LF.')
+        commands += '\n' 
+
+        # Send commands and receive a response
+        self.send(commands)
+        time.sleep(execute_interval_s)
+        return self.recieve()
 
     def read_mac_address(self):
-        self.send('read_mac_address')
-        time.sleep(self.EXECUTE_INTERVAL_READ_MAC_ADDRESS)
-        mac_address = self.recieve()
-        return(parse_mac_address(mac_address))
+        mac_address = self.execute_command('read_mac_address')
+        if len(mac_address) != BYTES_OF_MAC_ADDRESS * 2:
+            raise ValueError('Not the expected number of characters.')
+        return(mac_address)
 
     def read_certificate(self):
-        self.send('read_certificate')
-        time.sleep(self.EXECUTE_INTERVAL_READ_CERTIFICATE)
-        certificate = self.recieve()
-        return(parse_certificate(certificate))
+        certificate = self.execute_command('read_certificate', execute_interval_s=0.5)
+        if not re.fullmatch(PEM_FORMAT, certificate, re.DOTALL):
+            raise ValueError('Not in the correct format.')
+        return(certificate)
 
     def write_public_key(self, public_key_pem):
         # Remove CR/LF contained in PEM.
         filterd_public_key_pem = re.sub("\n|\r", "", public_key_pem) 
         # Remove PEM header and footer.
         base64_encoded_public_key = re.findall(PEM_FORMAT, filterd_public_key_pem, re.DOTALL)
+        if not base64_encoded_public_key :
+            raise ValueError('Not in the correct format.')
 
-        self.send('write_public_key', base64_encoded_public_key[0])
-        time.sleep(self.EXECUTE_INTERVAL_WRITE_PUBLIC_KEY)
-        status = self.recieve()
+        status = self.execute_command('write_public_key', base64_encoded_public_key[0], execute_interval_s=0.5)
+        if status != 'Successfully write public key.':
+            raise CommandExecutionError
 
     def lock_slot(self, slot_number):
-        self.send('lock_slot', slot_number)
-        time.sleep(self.EXECUTE_INTERVAL_LOCK_SLOT)
-        status = self.recieve()
+        status = self.execute_command('lock_slot', slot_number)
+        if status != 'Successfully Locked the slot.':
+            raise CommandExecutionError
 
     def close(self):
         self.serial_port.close()
@@ -81,14 +85,5 @@ class Device:
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
 
-def parse_mac_address(mac_address_string):
-    mac_address = mac_address_string.strip() 
-    if len(mac_address) != BYTES_OF_MAC_ADDRESS:
-        raise ValueError('Not the expected number of characters.')
-    return(mac_address)
-
-def parse_certificate(certificate_string):
-    certificate = certificate_string.strip() 
-    if not re.fullmatch(PEM_FORMAT, certificate, re.DOTALL):
-        raise ValueError('Not in the correct format.')
-    return(certificate)
+class CommandExecutionError(Exception):
+    '''Errors encountered during processing in firmware'''
