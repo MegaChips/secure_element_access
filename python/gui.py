@@ -1,9 +1,7 @@
 
 import os
 import argparse 
-import csv 
 from datetime import datetime
-from serial.tools import list_ports 
 from serial.serialutil import SerialException 
 from tkinter import *
 from tkinter import ttk
@@ -11,6 +9,7 @@ from tkinter import filedialog
 from tkinter.scrolledtext import ScrolledText
 
 import device 
+import command 
 
 # Texts embedded in widget 
 LABEL_TEXT_PORT                 = 'ポート'
@@ -19,7 +18,7 @@ LABEL_TEXT_PUBLIC_KEY           = '公開鍵'
 LABEL_TEXT_LOCK_CONFIG          = '公開鍵書き込み後にスロットをロックする'
 BUTTON_TEXT_BROWSE              = "参照"
 BUTTON_TEXT_EXECUTION           = "実行"    
-TITLE_TEXT_REGISTER_DEVICE_INFO = "セキュアエレメントデータ読み出し"    
+TITLE_TEXT_READ_DEVICE_INFOS    = "セキュアエレメントデータ読み出し"    
 TITLE_TEXT_WRITE_PUBLIC_KEY     = "公開鍵書き込み"    
 FILE_TYPE_CSV                   = [("CSVファイル", "*.csv")]
 FILE_TYPE_PEM                   = [("PEMファイル", "*.pem")]
@@ -45,8 +44,7 @@ class PortSelector(ttk.Frame):
         self.combobox.pack(side=LEFT)
 
     def set_port_list(self):
-        ports = list_ports.comports()
-        self.port_list = [info.device for info in ports] 
+        self.port_list = command.get_port_list() 
 
     def get_selected_port(self):
         return self.combobox.get()
@@ -117,15 +115,15 @@ class BoolConfigurator(ttk.Frame):
     def get_boolean(self):
         return self.bool_configuration.get()
 
-class RegisterDeviceInfo(Tk):
+class ReadDeviceInfos(Tk):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs) 
-        self.title(TITLE_TEXT_REGISTER_DEVICE_INFO)
+        self.title(TITLE_TEXT_READ_DEVICE_INFOS)
         self.port_selector = PortSelector(self, padding=10)
         self.file_selector = FileSelector(self, LABEL_TEXT_DEVICE_TABLE, FILE_TYPE_CSV, padding=10)
         self.log_monitor = LogMonitor(self, padding=10)
-        self.job_runner = JobRunner(self, command=self.register_device_info, padding=10)
+        self.job_runner = JobRunner(self, command=self.read_device_infos, padding=10)
 
         # Widget placement 
         self.port_selector.pack(side=TOP, fill=X)
@@ -133,36 +131,22 @@ class RegisterDeviceInfo(Tk):
         self.log_monitor.pack(side=TOP)
         self.job_runner.pack(side=TOP)
 
-    def register_device_info(self):
-
-        # Read data from the device
+    def read_device_infos(self):
         serial_port = self.port_selector.get_selected_port()
-        try:
-            with device.Device(port=serial_port) as d:
-                certificate = d.read_certificate()
-                mac_address = d.read_mac_address()
-        except SerialException:
-            self.log_monitor.log_error(ERR_LOG_CANNOT_OPEN_PORT)
-            return
-        except ValueError:
-            self.log_monitor.log_error(ERR_LOG_FAIL_READ)
-            return
-    
-        # Write the read data to the selected file
         table_file_path = self.file_selector.get_file_path()
         try:
-            with open(table_file_path, 'a', newline="") as table :
-                writer = csv.writer(table)
-                writer.writerow([certificate, mac_address])
+            command.read_device_infos(serial_port, table_file_path)
+        except SerialException:
+            self.log_monitor.log_error(ERR_LOG_CANNOT_OPEN_PORT)
+        except ValueError:
+            self.log_monitor.log_error(ERR_LOG_FAIL_READ)
         except FileNotFoundError:
             self.log_monitor.log_error(ERR_LOG_FILE_NOT_FOUND)
-            return
         except PermissionError:
             self.log_monitor.log_error(ERR_LOG_CANNOT_OPEN_FILE)
-            return
-    
-        # Outputs a success message if none of the errors occur
-        self.log_monitor.log_info(INFO_LOG_SUCCESS_WRITE_TO_FILE)
+        else:
+            # Outputs a success message if none of the errors occur
+            self.log_monitor.log_info(INFO_LOG_SUCCESS_WRITE_TO_FILE)
 
 
 class WritePublicKey(Tk):
@@ -185,38 +169,26 @@ class WritePublicKey(Tk):
 
     def write_public_key(self):
 
-        # Read the public key from the selected file
-        key_file_path = self.file_selector.get_file_path()
-        try:
-            with open(key_file_path, 'r', newline="") as key :
-                public_key = key.read()
-        except FileNotFoundError:
-            self.log_monitor.log_error(ERR_LOG_FILE_NOT_FOUND)
-            return
-        except PermissionError:
-            self.log_monitor.log_error(ERR_LOG_CANNOT_OPEN_FILE)
-            return
-    
-        # Write the public key to the device
         serial_port = self.port_selector.get_selected_port()
+        public_key_file_path = self.file_selector.get_file_path()
         slot_is_locked = self.bool_configurator.get_boolean()
         try:
-            with device.Device(port=serial_port) as d:
-                d.write_public_key(public_key)
-                if slot_is_locked:
-                    d.lock_slot('8')
+            command.write_public_key_from_file(serial_port, public_key_file_path)
+            if slot_is_locked:
+                command.lock_slot('8')
+        except FileNotFoundError:
+            self.log_monitor.log_error(ERR_LOG_FILE_NOT_FOUND)
+        except PermissionError:
+            self.log_monitor.log_error(ERR_LOG_CANNOT_OPEN_FILE)
         except SerialException:
             self.log_monitor.log_error(ERR_LOG_CANNOT_OPEN_PORT)
-            return
         except ValueError:
             self.log_monitor.log_error(ERR_LOG_INVALID_INPUT)
-            return
         except device.CommandExecutionError:
             self.log_monitor.log_error(ERR_LOG_FAIL_WRITE)
-            return
-    
-        # Outputs a success message if none of the errors occur
-        self.log_monitor.log_info(INFO_LOG_SUCCESS_WRITE_TO_DEVICE)
+        else:
+            # Outputs a success message if none of the errors occur
+            self.log_monitor.log_info(INFO_LOG_SUCCESS_WRITE_TO_DEVICE)
 
 def main():
 
@@ -225,7 +197,7 @@ def main():
     args = parser.parse_args()
 
     if args.mode == 'read' :
-        root = RegisterDeviceInfo()
+        root = ReadDeviceInfos()
     elif args.mode == 'write' :
         root = WritePublicKey()
 

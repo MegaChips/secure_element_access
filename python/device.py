@@ -1,9 +1,5 @@
 import serial
 import time 
-import re 
-
-BYTES_OF_MAC_ADDRESS = 6 
-PEM_FORMAT = '-----BEGIN .+-----(.+)-----END .+-----'
 
 class Device:
 
@@ -31,51 +27,6 @@ class Device:
         responce = responce_bytes.decode()
         return(responce.strip())
 
-    def execute_command(self, command, *command_args, execute_interval_s=0.1):
-
-        # Format into a single string.
-        # Separate each command or argument with a space.
-        commands = command 
-        for argument in command_args :
-            commands = commands + ' ' + argument 
-        if '\n' in commands or '\r' in commands:
-            raise ValueError('Commands and arguments must not contain CR/LF.')
-        commands += '\n' 
-
-        # Send commands and receive a response
-        self.send(commands)
-        time.sleep(execute_interval_s)
-        return self.recieve()
-
-    def read_mac_address(self):
-        mac_address = self.execute_command('read_mac_address')
-        if len(mac_address) != BYTES_OF_MAC_ADDRESS * 2:
-            raise ValueError('Not the expected number of characters.')
-        return(mac_address)
-
-    def read_certificate(self):
-        certificate = self.execute_command('read_certificate', execute_interval_s=0.5)
-        if not re.fullmatch(PEM_FORMAT, certificate, re.DOTALL):
-            raise ValueError('Not in the correct format.')
-        return(certificate)
-
-    def write_public_key(self, public_key_pem):
-        # Remove CR/LF contained in PEM.
-        filterd_public_key_pem = re.sub("\n|\r", "", public_key_pem) 
-        # Remove PEM header and footer.
-        base64_encoded_public_key = re.findall(PEM_FORMAT, filterd_public_key_pem, re.DOTALL)
-        if not base64_encoded_public_key :
-            raise ValueError('Not in the correct format.')
-
-        status = self.execute_command('write_public_key', base64_encoded_public_key[0], execute_interval_s=0.5)
-        if status != 'Successfully write public key.':
-            raise CommandExecutionError
-
-    def lock_slot(self, slot_number):
-        status = self.execute_command('lock_slot', slot_number)
-        if status != 'Successfully Locked the slot.':
-            raise CommandExecutionError
-
     def close(self):
         self.serial_port.close()
 
@@ -87,3 +38,20 @@ class Device:
 
 class CommandExecutionError(Exception):
     '''Errors encountered during processing in firmware'''
+
+def execute_command(port, command, *command_args, execute_interval_s=0.1):
+
+    # Format into a single string.
+    # Separate each command or argument with a space.
+    commands = command 
+    for argument in command_args :
+        commands = commands + ' ' + argument 
+    if '\n' in commands or '\r' in commands:
+        raise ValueError('Commands and arguments must not contain CR/LF.')
+    commands += '\n' 
+
+    # Send commands and receive a response
+    with Device(port) as d:
+        d.send(commands)
+        time.sleep(execute_interval_s)
+        return d.recieve()
