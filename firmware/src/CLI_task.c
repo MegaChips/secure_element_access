@@ -14,6 +14,7 @@
 #include "cryptoauthlib.h" 
 
 /* Definitions specific to this project. */
+#include "bsp.h"
 #include "definitions.h"
 
 
@@ -137,7 +138,7 @@ void prvCLITask( void *pvParam )
 
 static void prvCLITask_SendString( uint8_t *pucWriteString )
 {
-    SERCOM2_USART_Write( pucWriteString, (uint32_t)strlen( (const char*)pucWriteString ) );
+    USART_Write( pucWriteString, (uint32_t)strlen( (const char*)pucWriteString ) );
 }
 
 /*-----------------------------------------------------------*/
@@ -145,10 +146,10 @@ static void prvCLITask_SendString( uint8_t *pucWriteString )
 static void prvCLITask_ReceiveChar( uint8_t *pucReadCharacter )
 {
     /* check to see if there is any available data that has not yet been read. */
-    while( SERCOM2_USART_ReadCountGet() <= 0 )
+    while( USART_ReadCountGet() <= 0 )
     {
         vTaskDelay(5 / portTICK_PERIOD_MS);
     }
 
-    SERCOM2_USART_Read( pucReadCharacter, 1 );
+    USART_Read( pucReadCharacter, 1 );
 }

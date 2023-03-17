@@ -46,6 +46,7 @@
 // *****************************************************************************
 
 #include "bsp.h"
+#include "peripheral/sercom/usart/plib_sercom2_usart.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -78,6 +79,21 @@ void BSP_Initialize(void )
     LED_Off();
 
 
+}
+
+size_t USART_Write(uint8_t* pWrBuffer, const size_t size)
+{
+	return SERCOM2_USART_Write(pWrBuffer, size);
+}
+
+size_t USART_ReadCountGet(void)
+{
+    return SERCOM2_USART_ReadCountGet();
+}
+
+size_t USART_Read(uint8_t* pRdBuffer, const size_t size)
+{
+    return SERCOM2_USART_Read(pRdBuffer, size);
 }
 
 /*******************************************************************************

@@ -111,6 +111,12 @@
 
 void BSP_Initialize(void);
 
+size_t USART_Write(uint8_t* pWrBuffer, const size_t size);
+
+size_t USART_ReadCountGet(void);
+
+size_t USART_Read(uint8_t* pRdBuffer, const size_t size);
+
 #endif // _BSP_H
 
 /*******************************************************************************
