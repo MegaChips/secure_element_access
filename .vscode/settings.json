@@ -1,0 +1,10 @@
+{
+    "XC32_COMPILER_PATH": "C:\\Microchip\\xc32\\v4.10\\bin",
+    "TARGET_BOARD": "same54_xpro",
+    //"TARGET_BOARD": "samd51_micromod",
+    "BUILD_SYSTEM": "Unix Makefiles",
+    "BUILD_COMMAND": "make",
+    // Release or Debug
+    "BUILD_TYPE": "Debug",
+    "cortex-debug.openocdPath": "C:\\workspace\\openocd.exe",
+}

@@ -1,0 +1,78 @@
+{
+    "version": "2.0.0",
+    "tasks":[
+        {
+            "label": "pre-cmake",
+            "type": "shell",
+            "command": "gmkdir -p ${workspaceFolder}/build",
+            "group" : {
+                "kind" : "build",
+                "isDefault": false
+            },
+            "hide": true
+        },
+        {
+            "label": "cmake",
+            "type": "shell",
+            "command": "cmake -DBOARD=${config:TARGET_BOARD} -DTOOLCHAIN_PATH='${config:XC32_COMPILER_PATH}' -DCMAKE_BUILD_TYPE=${config:BUILD_TYPE} -S ${workspaceFolder} -B ${workspaceFolder}/build -G \"${config:BUILD_SYSTEM}\"",
+            "group" : {
+                "kind" : "build",
+                "isDefault": false
+            },
+            "dependsOn": [
+                "pre-cmake"
+            ],
+            "hide": true
+        },
+        {
+            "label": "clear project",
+            "type": "shell",
+            "command": "rm -r ${workspaceFolder}/build",
+            "group" : {
+                "kind" : "build",
+                "isDefault": false
+            },
+
+        },
+        {
+            "label": "build project",
+            "type": "shell",
+            "command": "${config:BUILD_COMMAND} -C ${workspaceFolder}/build",
+            "group" : {
+                "kind" : "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "cmake"
+            ]
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "make -C ${workspaceFolder}/build clean",
+            "group" : {
+                "kind" : "build",
+                "isDefault": false
+            },
+            "hide": true
+        },
+        {
+            "label": "secure element reader",
+            "type": "shell",
+            "command": "${workspaceFolder}/python/gui_read.pyw",
+            "group" : {
+                "kind" : "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "secure element writer",
+            "type": "shell",
+            "command": "${workspaceFolder}/python/gui_write.pyw",
+            "group" : {
+                "kind" : "build",
+                "isDefault": false
+            }
+        },
+    ]
+}
