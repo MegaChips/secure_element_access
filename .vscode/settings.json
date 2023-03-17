@@ -1,7 +1,7 @@
 {
     "XC32_COMPILER_PATH": "C:\\Microchip\\xc32\\v4.10\\bin",
-    "TARGET_BOARD": "same54_xpro",
-    //"TARGET_BOARD": "samd51_micromod",
+    // same54_xpro or samd51_micromod
+    "TARGET_BOARD": "samd51_micromod",
     "BUILD_SYSTEM": "Unix Makefiles",
     "BUILD_COMMAND": "make",
     // Release or Debug
