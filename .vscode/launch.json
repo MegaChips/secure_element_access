@@ -1,0 +1,46 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "request": "launch",
+            "name": "DEBUG(SAME54)",
+            "cwd": "C:\\workspace\\tools\\openocd\\tcl",
+            "executable": "${workspaceFolder}/build/secure_element_access.elf",
+            "configFiles": [
+                "board/microchip_same54_xplained_pro_ftdi.cfg",
+            ],
+            "interface": "swd",
+            "postStartSessionCommands": [
+                "monitor soft_reset_halt",
+                "flushregs",
+                "b main",
+                "load",
+                "continue",
+            ],
+        },
+        {
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "request": "launch",
+            "name": "DEBUG(SAMD51)",
+            "cwd": "C:\\workspace\\tools\\openocd\\tcl",
+            "executable": "${workspaceFolder}/build/secure_element_access.elf",
+            "configFiles": [
+                "board/sparkfun_micromod_samd51_ftdi.cfg",
+            ],
+            "interface": "swd",
+            "postStartSessionCommands": [
+                "monitor soft_reset_halt",
+                "flushregs",
+                "b main",
+                "load",
+                "continue",
+            ],
+        },
+    ]
+}

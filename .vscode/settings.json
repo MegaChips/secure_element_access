@@ -1,10 +1,11 @@
 {
-    "XC32_COMPILER_PATH": "C:\\Microchip\\xc32\\v4.10\\bin",
+    "XC32_COMPILER_PATH": "C:\\workspace\\tools\\Microchip\\xc32\\bin",
     // same54_xpro or samd51_micromod
     "TARGET_BOARD": "samd51_micromod",
     "BUILD_SYSTEM": "Unix Makefiles",
     "BUILD_COMMAND": "make",
     // Release or Debug
     "BUILD_TYPE": "Debug",
-    "cortex-debug.openocdPath": "C:\\workspace\\openocd.exe",
+    "cortex-debug.gdbPath": "C:\\workspace\\tools\\ARM_Toolchain\\bin\\arm-none-eabi-gdb.exe",
+    "cortex-debug.openocdPath" : "C:\\workspace\\tools\\openocd\\bin\\openocd.exe"
 }

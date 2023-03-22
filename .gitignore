@@ -3,7 +3,6 @@
 *.map
 *.d
 Gemfile*
-.vscode/launch.json
 .vscode/*cortex*
 build/*
 **/__pycache__
