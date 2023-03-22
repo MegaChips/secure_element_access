@@ -1,0 +1,45 @@
+This repository is used to access secure element on [SparkFun MicroMod SAMD51 Processor](https://www.sparkfun.com/products/16791).
+
+
+
+## Supported Hardware
+
+- [SparkFun MicroMod SAMD51 Processor](https://www.sparkfun.com/products/16791)
+
+
+
+## Hardware requirement
+
+- [SparkFun MicroMod mikroBUS carrier board](https://www.sparkfun.com/products/18710)
+- [SparkFun MicroMod SAMD51 Processor](https://www.sparkfun.com/products/16791)
+- [MIKROE USB I2C Click](https://www.mikroe.com/usb-i2c-click)
+- Wi-Fi Halow Click
+- USB Cable (Type A to Type **mini** B)
+- [FTDI C232HM-DDHSL-0](https://ftdichip.com/products/c232hm-ddhsl-0-2/)
+- [SWD pin header 2x5 Male 1.27mm](https://www.sparkfun.com/products/15362) on SparkFun MicroMod mikroBUS carrier board
+- [SWD Cable](https://www.sparkfun.com/products/15364)
+- JTAG/SWD converter
+
+
+
+## Hardware setup
+
+[Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/hardware_setup_guide.md) for more information.
+
+
+
+## Development Environment setup 
+
+[Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/development_environment_guide.md) for more information.
+
+
+
+## Firmware build
+
+[Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/firmware_build_guide.md) for more information.
+
+
+
+## Access secure element on Wi-Fi Halow Click
+
+[Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/secure_element_access_guide.md) for more information.
