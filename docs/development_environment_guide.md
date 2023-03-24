@@ -56,7 +56,7 @@ Windows 10に以下のツール類をインストールします。
 
 9. ファームウェア書き込みツールインストール
 
-   MegaChips GitHubリポジトリから[ファームウェア書き込みツール](https://github.com/MegaChips/flash_image_writer)を取得します。
+   MegaChips GitHubリポジトリから[ファームウェア書き込みツール](https://github.com/MegaChips/flash_write)を取得します。
 
    展開場所は`C:\workspace\tools\flash_write`です。
 
