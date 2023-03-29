@@ -43,3 +43,9 @@ This repository is used to access secure element on [SparkFun MicroMod SAMD51 Pr
 ## Access secure element on Wi-Fi Halow Click
 
 [Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/secure_element_access_guide.md) for more information.
+
+
+
+## About secure element
+
+- [ATECC608B-TNGTLS (Microchip)](https://www.microchip.com/en-us/product/ATECC608B-TNGTLS)
