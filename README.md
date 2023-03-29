@@ -30,7 +30,7 @@ This repository is used to access secure element on [SparkFun MicroMod SAMD51 Pr
 
 ## Development Environment setup 
 
-[Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/development_environment_guide.md) for more information.
+[Please see this document (only in japanese)](https://github.com/MegaChips/sdk_common_documents/blob/main/development_environment_guide.md) for more information.
 
 
 
