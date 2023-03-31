@@ -6,7 +6,8 @@ class ReadDeviceInfos(Tk):
         super().__init__(**kwargs) 
         self.title(TITLE_TEXT_READ_DEVICE_INFOS)
         self.port_selector = PortSelector(self, padding=10)
-        self.file_selector = FileSelector(self, LABEL_TEXT_DEVICE_TABLE, FILE_TYPE_CSV, padding=10)
+        file_type = [FILE_TYPE_CSV, FILE_TYPE_ALL]
+        self.file_selector = FileSelector(self, LABEL_TEXT_DEVICE_TABLE, file_type, padding=10)
         self.log_monitor = LogMonitor(self, padding=10)
         self.job_runner = JobRunner(self, command=self.read_device_infos, padding=10)
 

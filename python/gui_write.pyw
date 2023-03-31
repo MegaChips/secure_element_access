@@ -8,7 +8,8 @@ class WritePublicKey(Tk):
         self.title(TITLE_TEXT_WRITE_PUBLIC_KEY)
         self.port_selector = PortSelector(self, padding=10)
         self.bool_configurator = BoolConfigurator(self, LABEL_TEXT_LOCK_CONFIG, padding=10)
-        self.file_selector = FileSelector(self, LABEL_TEXT_PUBLIC_KEY, FILE_TYPE_PEM, padding=10)
+        file_type = [FILE_TYPE_PEM, FILE_TYPE_PUB, FILE_TYPE_ALL]
+        self.file_selector = FileSelector(self, LABEL_TEXT_PUBLIC_KEY, file_type, padding=10)
         self.log_monitor = LogMonitor(self, padding=10)
         self.job_runner = JobRunner(self, command=self.write_public_key, padding=10)
 

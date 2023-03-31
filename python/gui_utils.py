@@ -17,8 +17,10 @@ BUTTON_TEXT_BROWSE              = "参照"
 BUTTON_TEXT_EXECUTION           = "実行"    
 TITLE_TEXT_READ_DEVICE_INFOS    = "セキュアエレメントデータ読み出し"    
 TITLE_TEXT_WRITE_PUBLIC_KEY     = "公開鍵書き込み"    
-FILE_TYPE_CSV                   = [("CSVファイル", "*.csv")]
-FILE_TYPE_PEM                   = [("PEMファイル", "*.pem")]
+FILE_TYPE_CSV                   = ("CSVファイル", "*.csv")
+FILE_TYPE_PEM                   = ("PEMファイル", "*.pem")
+FILE_TYPE_PUB                   = ("公開鍵", "*.pub")
+FILE_TYPE_ALL                   = ("すべてのファイル", "*.*")
 
 # Messages output to the log monitor
 ERR_LOG_CANNOT_OPEN_PORT         = 'ポートが開けません。'
