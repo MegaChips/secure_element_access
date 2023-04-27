@@ -13,7 +13,8 @@ This repository is used to access secure element on [SparkFun MicroMod SAMD51 Pr
 - [SparkFun MicroMod mikroBUS carrier board](https://www.sparkfun.com/products/18710)
 - [SparkFun MicroMod SAMD51 Processor](https://www.sparkfun.com/products/16791)
 - [MIKROE USB I2C Click](https://www.mikroe.com/usb-i2c-click)
-- Wi-Fi Halow Click
+- MegaChips Wi-Fi Halow Click
+- Pin header 1x9 Make 2.54mm for Wi-Fi Halow Click Wake signal
 - USB Cable (Type A to Type **mini** B)
 - [FTDI C232HM-DDHSL-0](https://ftdichip.com/products/c232hm-ddhsl-0-2/)
 - [SWD pin header 2x5 Male 1.27mm](https://www.sparkfun.com/products/15362) on SparkFun MicroMod mikroBUS carrier board
