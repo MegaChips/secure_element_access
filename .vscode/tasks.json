@@ -14,7 +14,7 @@
         {
             "label": "cmake",
             "type": "shell",
-            "command": "cmake -DBOARD=${config:TARGET_BOARD} -DTOOLCHAIN_PATH='${config:XC32_COMPILER_PATH}' -DCMAKE_BUILD_TYPE=${config:BUILD_TYPE} -S ${workspaceFolder} -B ${workspaceFolder}/build -G \"${config:BUILD_SYSTEM}\"",
+            "command": "cmake -DBOARD=${config:TARGET_BOARD} -DTOOLCHAIN_PATH='${config:XC32_COMPILER_PATH}' -DCMAKE_BUILD_TYPE=${config:BUILD_TYPE} -S ${workspaceFolder} -B ${workspaceFolder}/build -G \"Unix Makefiles\"",
             "group" : {
                 "kind" : "build",
                 "isDefault": false
@@ -37,7 +37,7 @@
         {
             "label": "build project",
             "type": "shell",
-            "command": "${config:BUILD_COMMAND} -C ${workspaceFolder}/build",
+            "command": "make -C ${workspaceFolder}/build",
             "group" : {
                 "kind" : "build",
                 "isDefault": true

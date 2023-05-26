@@ -1,8 +1,6 @@
 {
     "XC32_COMPILER_PATH": "C:\\workspace\\tools\\Microchip\\xc32\\bin",
     "TARGET_BOARD": "samd51_micromod",
-    "BUILD_SYSTEM": "Unix Makefiles",
-    "BUILD_COMMAND": "make",
     // Release or Debug
     "BUILD_TYPE": "Debug",
     "cortex-debug.gdbPath": "C:\\workspace\\tools\\ARM_Toolchain\\bin\\arm-none-eabi-gdb.exe",
