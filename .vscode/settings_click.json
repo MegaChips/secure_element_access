@@ -1,0 +1,8 @@
+{
+    "XC32_COMPILER_PATH": "C:\\workspace\\tools\\Microchip\\xc32\\bin",
+    "TARGET_BOARD": "samd51_micromod",
+    // Release or Debug
+    "BUILD_TYPE": "Debug",
+    "cortex-debug.gdbPath": "C:\\workspace\\tools\\ARM_Toolchain\\bin\\arm-none-eabi-gdb.exe",
+    "cortex-debug.openocdPath" : "C:\\workspace\\tools\\openocd\\bin\\openocd.exe"
+}

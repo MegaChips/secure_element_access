@@ -20,6 +20,9 @@ if ("${BOARD}" STREQUAL "same54_xpro")
 elseif("${BOARD}" STREQUAL "samd51_micromod")
     set(TARGET_BOARD "samd51_micromod")
     set(mp_processor "ATSAMD51J20A")
+elseif("${BOARD}" STREQUAL "samd51_mcu")
+    set(TARGET_BOARD "samd51_mcu")
+    set(mp_processor "ATSAMD51J20A")
 else()
     message(FATAL_ERROR "Board is not supported")
 endif()
@@ -231,6 +234,13 @@ elseif("${TARGET_BOARD}" STREQUAL "samd51_micromod")
         peripheral_src
         "${peripheral_dir}/sercom/i2c_master/plib_sercom3_i2c_master.c"
         "${peripheral_dir}/sercom/usart/plib_sercom5_usart.c"
+    )
+    elseif("${TARGET_BOARD}" STREQUAL "samd51_mcu")
+    list(
+        APPEND
+        peripheral_src
+        "${peripheral_dir}/sercom/i2c_master/plib_sercom2_i2c_master.c"
+        "${peripheral_dir}/sercom/usart/plib_sercom0_usart.c"
     )
 else()
 endif()
