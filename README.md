@@ -1,52 +1,9 @@
-This repository is used to access secure element on [SparkFun MicroMod SAMD51 Processor](https://www.sparkfun.com/products/16791).
+This repository is used to access external flash in SDKs for various Wi-Fi Halow SDK.
 
+## Open Source License
 
+This repository uses following open source software.
 
-## Supported Hardware
+- Microchip Harmony 3 drivers under mplab harmony license
+- Microchip CryptoAuthentication Library under mplab harmony license
 
-- [SparkFun MicroMod SAMD51 Processor](https://www.sparkfun.com/products/16791)
-
-
-
-## Hardware requirement
-
-- [SparkFun MicroMod mikroBUS carrier board](https://www.sparkfun.com/products/18710)
-- [SparkFun MicroMod SAMD51 Processor](https://www.sparkfun.com/products/16791)
-- [MIKROE USB I2C Click](https://www.mikroe.com/usb-i2c-click)
-- MegaChips Wi-Fi Halow Click
-- Pin header 1x9 Make 2.54mm for Wi-Fi Halow Click Wake signal
-- USB Cable (Type A to Type **mini** B)
-- [FTDI C232HM-DDHSL-0](https://ftdichip.com/products/c232hm-ddhsl-0-2/)
-- [SWD pin header 2x5 Male 1.27mm](https://www.sparkfun.com/products/15362) on SparkFun MicroMod mikroBUS carrier board
-- [SWD Cable](https://www.sparkfun.com/products/15364)
-- JTAG/SWD converter
-
-
-
-## Hardware setup
-
-[Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/hardware_setup_guide.md) for more information.
-
-
-
-## Development Environment setup 
-
-[Please see this document (only in japanese)](https://github.com/MegaChips/sdk_common_documents/blob/main/development_environment_guide.md) for more information.
-
-
-
-## Firmware build
-
-[Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/firmware_build_guide.md) for more information.
-
-
-
-## Access secure element on Wi-Fi Halow Click
-
-[Please see this document (only in japanese)](https://github.com/MegaChips/secure_element_access/blob/master/docs/secure_element_access_guide.md) for more information.
-
-
-
-## About secure element
-
-- [ATECC608B-TNGTLS (Microchip)](https://www.microchip.com/en-us/product/ATECC608B-TNGTLS)
