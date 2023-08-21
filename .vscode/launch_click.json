@@ -12,7 +12,7 @@
             "cwd": "C:\\workspace\\tools\\openocd\\tcl",
             "executable": "${workspaceFolder}/build/secure_element_access.elf",
             "configFiles": [
-                "board/microchip_samd51_mccmcu_ftdi.cfg",
+                "board/microchip_samd51_micromod_ftdi.cfg",
             ],
             "interface": "swd",
             "postStartSessionCommands": [

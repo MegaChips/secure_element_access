@@ -43,14 +43,6 @@
 
 static void OSCCTRL_Initialize(void)
 {
-    /****************** XOSC1 Initialization   ********************************/
-    /* Crystal oscillator clock is 12MHz. */
-    /* Configure External Oscillator */
-    OSCCTRL_REGS->OSCCTRL_XOSCCTRL[1] = OSCCTRL_XOSCCTRL_STARTUP(0U) | OSCCTRL_XOSCCTRL_IMULT(4U) | OSCCTRL_XOSCCTRL_IPTAT(3U) | OSCCTRL_XOSCCTRL_XTALEN_Msk | OSCCTRL_XOSCCTRL_ENABLE_Msk;
-    while ((OSCCTRL_REGS->OSCCTRL_STATUS & OSCCTRL_STATUS_XOSCRDY1_Msk) != OSCCTRL_STATUS_XOSCRDY1_Msk)
-    {
-        /* Waiting for the Ready state */
-    }
 }
 
 static void OSC32KCTRL_Initialize(void)
@@ -152,10 +144,8 @@ static void DFLL_Initialize(void)
 {
 }
 
-
 static void GCLK0_Initialize(void)
 {
-
     /* selection of the CPU clock Division */
     MCLK_REGS->MCLK_CPUDIV = MCLK_CPUDIV_DIV(0x01);
 
@@ -233,7 +223,6 @@ void CLOCK_Initialize (void)
 
     /* GCLK2 is used for FDPLL0 and FDPLL1 */
     GCLK2_Initialize();
-
     FDPLL0_Initialize();
     FDPLL1_Initialize();
 
@@ -248,7 +237,6 @@ void CLOCK_Initialize (void)
 
     /* Selection of the Generator and write Lock for OSCCTRL_FDPLL032K OSCCTRL_FDPLL132K SDHC0_SLOW SDHC1_SLOW SERCOM0_SLOW SERCOM1_SLOW SERCOM2_SLOW SERCOM3_SLOW SERCOM4_SLOW SERCOM5_SLOW */
     GCLK_REGS->GCLK_PCHCTRL[3] = GCLK_PCHCTRL_GEN(0x4U)  | GCLK_PCHCTRL_CHEN_Msk;
-
     while ((GCLK_REGS->GCLK_PCHCTRL[3] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk)
     {
         /* Wait for synchronization */
@@ -256,7 +244,6 @@ void CLOCK_Initialize (void)
 
     /* Selection of the Generator and write Lock for EIC */
     GCLK_REGS->GCLK_PCHCTRL[4] = GCLK_PCHCTRL_GEN(0x1)  | GCLK_PCHCTRL_CHEN_Msk;
-
     while ((GCLK_REGS->GCLK_PCHCTRL[4] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk)
     {
         /* Wait for synchronization */
