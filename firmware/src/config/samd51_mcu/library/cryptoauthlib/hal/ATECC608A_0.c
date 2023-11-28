@@ -16,5 +16,5 @@ ATCAIfaceCfg atecc608a_0_init_data = {
     .atcai2c.baud          = 100000,
     .wake_delay            = 1500,
     .rx_retries            = 20,
-    .cfg_data              = &sercom2_plib_i2c_api
+    .cfg_data              = &sercom1_plib_i2c_api
 };

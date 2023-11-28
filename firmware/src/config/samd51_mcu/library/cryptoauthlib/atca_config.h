@@ -69,7 +69,7 @@ typedef struct atca_plib_api
     atca_i2c_plib_transfer_setup    transfer_setup;
 } atca_plib_i2c_api_t;
 
-extern atca_plib_i2c_api_t sercom2_plib_i2c_api;
+extern atca_plib_i2c_api_t sercom1_plib_i2c_api;
 
 
 
