@@ -48,7 +48,9 @@ static void OSCCTRL_Initialize(void)
 static void OSC32KCTRL_Initialize(void)
 {
     /* RTC clock is 1.024 kHz gerated by internal 32kHz oscillator */
+#if 0
     OSC32KCTRL_REGS->OSC32KCTRL_RTCCTRL = OSC32KCTRL_RTCCTRL_RTCSEL(0);
+#endif
 
     /* RTC clock is 32.768 kHz gerated by internal 32kHz oscillator */
 #if 0
@@ -62,10 +64,8 @@ static void OSC32KCTRL_Initialize(void)
 #endif
 
     /* RTC clock is 32.768 kHz gerated by external 32kHz oscillator */
-#if 0
     OSC32KCTRL_REGS->OSC32KCTRL_RTCCTRL = OSC32KCTRL_RTCCTRL_RTCSEL(OSC32KCTRL_RTCCTRL_RTCSEL_XOSC32K_Val);
     OSC32KCTRL_REGS->OSC32KCTRL_XOSC32K = OSC32KCTRL_XOSC32K_ENABLE(1) | OSC32KCTRL_XOSC32K_XTALEN(1) | OSC32KCTRL_XOSC32K_EN32K(1);
-#endif
 }
 
 static void FDPLL0_Initialize(void)
@@ -256,9 +256,9 @@ void CLOCK_Initialize (void)
         /* Wait for synchronization */
     }
 
-    /* Selection of the Generator and write Lock for SERCOM2_CORE as I2C */
-    GCLK_REGS->GCLK_PCHCTRL[23] = GCLK_PCHCTRL_GEN(0x3U)  | GCLK_PCHCTRL_CHEN_Msk;
-    while ((GCLK_REGS->GCLK_PCHCTRL[23] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk)
+    /* Selection of the Generator and write Lock for SERCOM1_CORE as I2C */
+    GCLK_REGS->GCLK_PCHCTRL[8] = GCLK_PCHCTRL_GEN(0x3U)  | GCLK_PCHCTRL_CHEN_Msk;
+    while ((GCLK_REGS->GCLK_PCHCTRL[8] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk)
     {
         /* Wait for synchronization */
     }
@@ -274,10 +274,10 @@ void CLOCK_Initialize (void)
     MCLK_REGS->MCLK_AHBMASK = 0xffffff;
 
     /* Configure the APBA Bridge Clocks */
-    MCLK_REGS->MCLK_APBAMASK = 0x17ff;
+    MCLK_REGS->MCLK_APBAMASK = 0x37ff;
 
     /* Configure the APBB Bridge Clocks */
-    MCLK_REGS->MCLK_APBBMASK = 0x14216;
+    MCLK_REGS->MCLK_APBBMASK = 0x14016;
 
     /* Configure the APBC Bridge Clocks */
     MCLK_REGS->MCLK_APBCMASK = 0x400;

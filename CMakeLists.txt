@@ -239,7 +239,7 @@ elseif("${TARGET_BOARD}" STREQUAL "samd51_micromod")
     list(
         APPEND
         peripheral_src
-        "${peripheral_dir}/sercom/i2c_master/plib_sercom2_i2c_master.c"
+        "${peripheral_dir}/sercom/i2c_master/plib_sercom1_i2c_master.c"
         "${peripheral_dir}/sercom/usart/plib_sercom0_usart.c"
     )
 else()

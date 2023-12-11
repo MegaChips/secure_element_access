@@ -77,9 +77,9 @@ void PORT_Initialize(void)
   uint32_t pb_port_out = 0UL;
 
   // I2C for ATECC608 (COM2)
-  PORT_REGS->GROUP[0].PORT_PINCFG[12] = 0x1;
-  PORT_REGS->GROUP[0].PORT_PINCFG[13] = 0x1;
-  PORT_REGS->GROUP[0].PORT_PMUX[6] = 0x22;
+  PORT_REGS->GROUP[0].PORT_PINCFG[16] = 0x1;
+  PORT_REGS->GROUP[0].PORT_PINCFG[17] = 0x1;
+  PORT_REGS->GROUP[0].PORT_PMUX[8] = 0x22;
 
   // UART (COM0)
   PORT_REGS->GROUP[0].PORT_PINCFG[4] = 0x1;
@@ -89,9 +89,6 @@ void PORT_Initialize(void)
   // PA05 is LED and is set HIGH
   pa_port_dir |= (1UL << 5);
   pa_port_out |= (1UL << 5);
-
-  // PA01 is Reset Button and is pulluped
-  PORT_REGS->GROUP[0].PORT_PINCFG[1] = 0x4;
 
   // PA27 is User Button and is pulluped
   PORT_REGS->GROUP[0].PORT_PINCFG[27] = 0x4;
